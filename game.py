@@ -23,15 +23,15 @@ width = 80
 xp = (WIDTH - width) // 2
 yp = HEIGHT - height
 vp = 10
-num = 1.5
 
+score = 0
 
 def drawScore():
     win.fill(black)
     pygame.font.init()
     path = pygame.font.match_font("arial")
     Font = pygame.font.Font(path, 30)
-    text = ''.join([chr(int(str(el), 8)) for el in [107, 141, 155, 145, 40, 157, 166, 145, 162]])
+    text = 'Your Score: ' + str(score)
     a = Font.render(text, 1, (255, 255, 255))
     win.blit(a, (WIDTH // 2 - 70, HEIGHT // 3))
     pygame.display.update()
@@ -50,16 +50,17 @@ def drawWindow():
 
 run = True
 
+velocity = 8
+vx = velocity * func(-1, 1)
+vy = velocity * func(-1, 1)
+num = 1.5
+
 while run:
     clock.tick(c2s)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
-
-    velocity = 8
-    vx = velocity * func(-1, 1)
-    vy = velocity * func(-1, 1)
 
     if x + vx < bound + radius or x + vx > WIDTH - bound - radius:
         vx = -vx
@@ -72,10 +73,11 @@ while run:
     if keys[pygame.K_RIGHT] and xp < WIDTH - width - bound:
         xp += vp
 
-    if xp <= x + vx <= xp + width:
-        vx *= num
-        vy *= num
+    if yp <= y + radius <= yp + height:
         if xp <= x + vx <= xp + width:
+            vx *= num
+            vy *= num
+            score += 1
             vy = -vy
         else:
             drawScore()
